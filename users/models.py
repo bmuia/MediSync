@@ -21,9 +21,10 @@ class CustomUser(AbstractUser):
         ('admin','Admin'),
         ('patient', 'Patient')
     ]
+    username = None
     email = models.EmailField(unique=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
     role = models.CharField(choices=ROLE_CHOICES,max_length=20,default='patient')
     # Users won't be deleted if a hospital is removed hence opting for SET_NULL rather than using .CASCADE
     hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL,null=True,blank=True)
