@@ -43,9 +43,12 @@ class PatientOnlyView(APIView):
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = RegistrationSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated, IsAdmin]
 
     def create(self, request, *args, **kwargs):
+        #Admin work to create new users
+        if request.user.role != 'admin':  
+            return Response({"error": "Only admins can register new users."}, status=status.HTTP_403_FORBIDDEN)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
