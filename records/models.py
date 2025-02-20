@@ -21,7 +21,7 @@ class MedicalRecord(models.Model):
     treatment_drugs = models.TextField()
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Patient record for {self.patient} by {self.doctor} whose diagnosis is{self.diagonis} and so on"
