@@ -1,3 +1,24 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser, Hospital
 
-# Register your models here.
+class CustomUserAdmin(UserAdmin):
+    list_display = ('email', 'role', 'is_staff', 'is_superuser')
+    list_filter = ('role', 'is_staff', 'is_superuser')
+    search_fields = ('email',)
+    ordering = ('email',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Personal Info', {'fields': ('role', 'hospital')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'role', 'hospital', 'is_staff', 'is_superuser')}
+        ),
+    )
+    filter_horizontal = ('groups', 'user_permissions')
+
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Hospital)

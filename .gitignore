@@ -38,4 +38,4 @@ media/
 pip-log.txt
 
 # Include the requirements.txt file explicitly for dependencies
-!requirements.txt
+requirements.txt
