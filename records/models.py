@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import Hospital, CustomUser
+from encrypted_model_fields.fields import EncryptedTextField
 # Create your models here.
 class Patient(models.Model):
     first_name = models.CharField(max_length=255)
@@ -13,18 +14,43 @@ class Patient(models.Model):
         return f"Patient is {self.first_name} {self.last_name}"
 
 
-class MedicalRecord(models.Model):
+class DiagnosisRecord(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
-    diagonis = models.TextField()
-    treatment_plan = models.TextField()
-    treatment_drugs = models.TextField()
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
+    diagnosis = EncryptedTextField()  
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Patient record for {self.patient} by {self.doctor} whose diagnosis is{self.diagonis} and so on"
+        return f"Diagnosis for {self.patient} by {self.doctor}"
+
+class TreatmentPlan(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
+    treatment_details = EncryptedTextField()  
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Treatment Plan for {self.patient}"
+
+class MedicationRecord(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
+    drug_name = EncryptedTextField()  
+    dosage = EncryptedTextField()  
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Medication for {self.patient}: {self.drug_name}"
+
+class MedicalRecord(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    diagnosis = models.ForeignKey(DiagnosisRecord, on_delete=models.CASCADE, null=True, blank=True)
+    treatment = models.ForeignKey(TreatmentPlan, on_delete=models.CASCADE, null=True, blank=True)
+    medication = models.ForeignKey(MedicationRecord, on_delete=models.CASCADE, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Medical Record for {self.patient}"
     
 class DataExhangeLog(models.Model):
     STATUS_CHOICES = [
@@ -43,3 +69,15 @@ class DataExhangeLog(models.Model):
 
     def __str__(self):
         return f"Data request for {self.patient} from {self.source_hospital} to {self.destination_hospital}"
+
+
+class APIAccessLog(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)  
+    endpoint = models.CharField(max_length=255)  
+    method = models.CharField(max_length=10)
+    timestamp = models.DateTimeField(auto_now_add=True) 
+    ip_address = models.GenericIPAddressField(null=True, blank=True)  
+    status_code = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.user} accessed {self.endpoint} ({self.method}) at {self.timestamp}"

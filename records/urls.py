@@ -1,5 +1,14 @@
 from django.urls import path
-from .views import PatientAPiView, PatientCreateAPIView, PatientDetailAPIView, MedicalRecordListAPIView, MedicalRecordCreateAPIView, MedicalRecordDetailAPIView, DataExchangeLogListAPIView, DataExchangeLogCreateAPIView, DataExchangeLogDetailAPIView
+from .views import (PatientAPiView, 
+                    PatientCreateAPIView, 
+                    PatientDetailAPIView,
+                    DiagnosisCreateAPIView,
+                    TreatmentPlanCreateAPIView,
+                    MedicationCreateAPIView,
+                    MedicalRecordListAPIView, 
+                    DataExchangeLogListAPIView, 
+                    DataExchangeLogCreateAPIView, 
+                    DataExchangeLogDetailAPIView)
 
 
 urlpatterns = [
@@ -7,9 +16,11 @@ urlpatterns = [
     path('patient/create/', PatientCreateAPIView.as_view(), name='patient-create'),
     path('patient/<int:pk>', PatientDetailAPIView.as_view(), name='patient-detail'),
 
-    path('medical-records/', MedicalRecordListAPIView.as_view(), name='medical-record-list'),
-    path('medical-records/create/', MedicalRecordCreateAPIView.as_view(), name='medical-record-create'),
-    path('medical-records/<int:pk>/', MedicalRecordDetailAPIView.as_view(), name='medical-record-detail'),
+
+    path('diagnosis/create/', DiagnosisCreateAPIView.as_view(), name='diagnosis-create'),
+    path('treatment/create/', TreatmentPlanCreateAPIView.as_view(), name='treatment-create'),
+    path('medication/create/', MedicationCreateAPIView.as_view(), name='medication-create'),
+    path('medical-records/', MedicalRecordListAPIView.as_view(), name='medical-records'),
 
 
     path('data-exchange/', DataExchangeLogListAPIView.as_view(), name='data-exchange-list'),
