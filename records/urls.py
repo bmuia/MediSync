@@ -14,7 +14,7 @@ from .views import (PatientAPiView,
 urlpatterns = [
     path('patients/', PatientAPiView.as_view(), name='patient-list'),
     path('patient/create/', PatientCreateAPIView.as_view(), name='patient-create'),
-    path('patient/<int:pk>', PatientDetailAPIView.as_view(), name='patient-detail'),
+    path('patient/<int:pk>/', PatientDetailAPIView.as_view(), name='patient-detail'),
 
 
     path('diagnosis/create/', DiagnosisCreateAPIView.as_view(), name='diagnosis-create'),

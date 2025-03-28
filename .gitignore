@@ -14,6 +14,8 @@ __pycache__/
 # Ignore Django migrations
 **/migrations/
 
+!**/migrations/__init__.py
+
 # Ignore static and media files generated during runtime
 static/
 media/
