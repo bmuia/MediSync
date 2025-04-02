@@ -4,9 +4,7 @@ from .models import (
 )
 
 class PatientAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'gender', 'date_of_birth', 'hospital', 'medical_record_number')
-    search_fields = ('first_name', 'last_name', 'medical_record_number')
-    list_filter = ('hospital', 'gender')
+    list_display = ( 'user', 'medical_record_number')
 
 class DiagnosisRecordAdmin(admin.ModelAdmin):
     list_display = ('patient', 'doctor', 'created_at')

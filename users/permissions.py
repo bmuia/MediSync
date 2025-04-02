@@ -39,3 +39,33 @@ class IsPatient(BasePermission):
         if request.user.is_authenticated and request.user.role == 'patient':
             return True
         raise PermissionDenied("Only patients can access this resource.")
+
+class IsRadiologist(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.role == 'radiologist':
+            return True
+        raise PermissionDenied("Only radiologists can access this resource.")
+
+class IsLabTechnician(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.role == 'lab_technician':
+            return True
+        raise PermissionDenied("Only lab technicians can access this resource.")
+
+class IsPharmacist(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.role == 'pharmacist':
+            return True
+        raise PermissionDenied("Only pharmacists can access this resource.")
+
+class IsDataAnalyst(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.role == 'data_analyst':
+            return True
+        raise PermissionDenied("Only data analysts can access this resource.")
+
+class IsPublicHealthOfficial(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.role == 'public_health_official':
+            return True
+        raise PermissionDenied("Only public health officials can access this resource.")
