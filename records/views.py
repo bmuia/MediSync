@@ -38,7 +38,7 @@ class MedicationCreateAPIView(generics.CreateAPIView):
 class MedicalRecordListAPIView(generics.ListAPIView):
     queryset = MedicalRecord.objects.all()
     serializer_class = MedicalRecordSerializer
-    permission_classes = [IsAuthenticated, IsAdmin | IsDoctor]
+    permission_classes = [IsAuthenticated | IsAdmin | IsDoctor]
 
 # DATA EXCHANGE LOG VIEWS
 class DataExchangeLogListAPIView(generics.ListAPIView):

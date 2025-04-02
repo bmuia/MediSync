@@ -3,10 +3,7 @@ from users.models import Hospital, CustomUser
 from encrypted_model_fields.fields import EncryptedTextField
 # Create your models here.
 class Patient(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    gender = models.CharField(max_length=10)
-    date_of_birth = models.DateField()
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'patient'})
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     medical_record_number = models.CharField(max_length=20, unique=True)
 
