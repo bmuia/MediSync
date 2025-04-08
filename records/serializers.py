@@ -1,19 +1,15 @@
 from rest_framework import serializers
-from .models import Patient, MedicalRecord, DiagnosisRecord, TreatmentPlan, MedicationRecord,DataExhangeLog
-from users.serializers import HospitalSerializer
+from .models import Patient, MedicalRecord, DiagnosisRecord, TreatmentPlan, MedicationRecord,DataExchangeLog
+from users.serializers import HospitalSerializer,UserSerializer
 from users.models import Hospital
 class PatientSerializer(serializers.ModelSerializer):
-    hospital = HospitalSerializer(read_only=True)  # For fetching hospital details
-    hospital_id = serializers.PrimaryKeyRelatedField(
-        queryset=Hospital.objects.all(), source="hospital", write_only=True
-    )  # For creating a patient with hospital ID
 
     class Meta:
         model = Patient
-        fields = ['id', 'first_name', 'last_name', 'gender', 'date_of_birth', 
-                  'medical_record_number', 'hospital', 'hospital_id']
+        fields = '__all__'
 
 class DiagnosisSerializer(serializers.ModelSerializer):
+    doctor = UserSerializer()
     class Meta:
         model = DiagnosisRecord
         fields = '__all__'
@@ -29,11 +25,16 @@ class MedicationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
+    patient = PatientSerializer()
+    diagnosis = DiagnosisSerializer()
+    treatment = TreatmentPlanSerializer()
+    medication = MedicationSerializer()
+    
     class Meta:
         model = MedicalRecord
         fields = '__all__'
         
 class DataExchangeLogSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DataExhangeLog
+        model = DataExchangeLog
         fields = '__all__'

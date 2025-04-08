@@ -9,20 +9,27 @@ class HospitalSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class UserSerializer(serializers.ModelSerializer):
+    hospital = HospitalSerializer()  # If you want to show hospital details for any user
+    first_name = serializers.CharField()  # Assuming you have first_name in CustomUser
+    last_name = serializers.CharField()   # Assuming you have last_name in CustomUser
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'role', 'hospital']
+        fields = ['id', 'email', 'role', 'hospital', 'first_name', 'last_name']
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
 
-        #Hide sensitive data from non-admins i.e patienys
+        # Hide sensitive data for non-admins (i.e., patients)
         if instance.role != 'admin':
-            data.pop('hospital')  # Hide hospital field
+            data.pop('hospital')  # Hide hospital field for non-admin users
+        if instance.role != 'doctor':
+            data.pop('first_name')  # Hide doctor-specific data for non-doctors
+            data.pop('last_name')
 
         return data
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:

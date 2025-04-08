@@ -43,12 +43,15 @@ class CustomUser(AbstractUser):
         ('api_user', 'API User'),
     ]
 
-    username = None
+    username=None
     email = models.EmailField(unique=True)
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
     role = models.CharField(choices=ROLE_CHOICES, max_length=50)
     hospital = models.ForeignKey(Hospital, on_delete=models.SET_NULL, null=True, blank=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 

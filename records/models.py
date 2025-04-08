@@ -48,7 +48,7 @@ class MedicalRecord(models.Model):
     def __str__(self):
         return f"Medical Record for {self.patient}"
     
-class DataExhangeLog(models.Model):
+class DataExchangeLog(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('approved', 'Approved'),
