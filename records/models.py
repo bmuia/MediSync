@@ -11,8 +11,8 @@ class Patient(models.Model):
 
 
 class DiagnosisRecord(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,null=True,blank=True)
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'},null=True,blank=True)
     diagnosis = EncryptedTextField()  
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -20,8 +20,9 @@ class DiagnosisRecord(models.Model):
         return f"Diagnosis for {self.patient} by {self.doctor}"
 
 class TreatmentPlan(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,null=True,blank=True)
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'},null=True,blank=True)
+    treatment_plan = EncryptedTextField(null=True, blank=True)
     treatment_details = EncryptedTextField()  
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -29,8 +30,8 @@ class TreatmentPlan(models.Model):
         return f"Treatment Plan for {self.patient}"
 
 class MedicationRecord(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'})
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,null=True,blank=True) 
+    doctor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, limit_choices_to={'role': 'doctor'},null=True,blank=True)      
     drug_name = EncryptedTextField()  
     dosage = EncryptedTextField()  
     created_at = models.DateTimeField(auto_now_add=True)
@@ -39,7 +40,7 @@ class MedicationRecord(models.Model):
         return f"Medication for {self.patient}: {self.drug_name}"
 
 class MedicalRecord(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,null=True,blank=True)
     diagnosis = models.ForeignKey(DiagnosisRecord, on_delete=models.CASCADE, null=True, blank=True)
     treatment = models.ForeignKey(TreatmentPlan, on_delete=models.CASCADE, null=True, blank=True)
     medication = models.ForeignKey(MedicationRecord, on_delete=models.CASCADE, null=True, blank=True)
@@ -55,10 +56,11 @@ class DataExchangeLog(models.Model):
         ('rejected', 'Rejected'),
     ]
 
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    source_hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name="source_hospital")
-    destination_hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name="destination_hospital")
-    requested_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="requested_by")
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE,null= True,blank=True)
+    source_hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name="source_hospital",null=True,blank=True)
+    # Assuming Hospital is a model that represents hospitals in your system
+    destination_hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, related_name="destination_hospital",null=True,blank=True)  
+    requested_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="requested_by",null=True,blank=True)    
     approved_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name="approved_by")
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     timestamp = models.DateTimeField(auto_now_add=True)
